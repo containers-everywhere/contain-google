@@ -40,7 +40,7 @@ async function isGoogleAlreadyAssignedInMAC () {
 
   // Clear all google cookies
   for (let googleDomain of GOOGLE_DOMAINS) {
-    googleHostREs.push(new RegExp(`^(.*)?${googleDomain}$`));
+    googleHostREs.push(new RegExp(`^(.*\\.)?${googleDomain}$`));
     const googleCookieUrl = `https://${googleDomain}/`;
 
     browser.cookies.getAll({domain: googleDomain}).then(cookies => {
