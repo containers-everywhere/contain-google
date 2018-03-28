@@ -10,6 +10,7 @@ let macAddonEnabled = false;
 let googleCookieStoreId = null;
 let googleCookiesCleared = false;
 
+const canceledRequests = {};
 const googleHostREs = [];
 
 async function isMACAddonEnabled () {
@@ -59,6 +60,49 @@ async function getMACAssignment (url) {
   }
 }
 
+function cancelRequest (tab, options) {
+  // we decided to cancel the request at this point, register canceled request
+  canceledRequests[tab.id] = {
+    requestIds: {
+      [options.requestId]: true
+    },
+    urls: {
+      [options.url]: true
+    }
+  };
+
+  // since webRequest onCompleted and onErrorOccurred are not 100% reliable
+  // we register a timer here to cleanup canceled requests, just to make sure we don't
+  // end up in a situation where certain urls in a tab.id stay canceled
+  setTimeout(() => {
+    if (canceledRequests[tab.id]) {
+      delete canceledRequests[tab.id];
+    }
+  }, 2000);
+}
+
+function shouldCancelEarly (tab, options) {
+  // we decided to cancel the request at this point
+  if (!canceledRequests[tab.id]) {
+    cancelRequest(tab, options);
+  } else {
+    let cancelEarly = false;
+    if (canceledRequests[tab.id].requestIds[options.requestId] ||
+        canceledRequests[tab.id].urls[options.url]) {
+      // same requestId or url from the same tab
+      // this is a redirect that we have to cancel early to prevent opening two tabs
+      cancelEarly = true;
+    }
+    // register this requestId and url as canceled too
+    canceledRequests[tab.id].requestIds[options.requestId] = true;
+    canceledRequests[tab.id].urls[options.url] = true;
+    if (cancelEarly) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function generateGoogleHostREs () {
   for (let googleDomain of GOOGLE_DOMAINS) {
     googleHostREs.push(new RegExp(`^(.*\\.)?${googleDomain}$`));
@@ -106,12 +150,12 @@ async function containGoogle (options) {
     }
   }
 
-  // We have to check with every request if Google is assigned with MAC
-  // because the user can assign it at any given time (needs MAC Events)
-  if (isGoogle && macAddonEnabled) {
-    const googleAlreadyAssigned = await getMACAssignment(options.url);
-    if (googleAlreadyAssigned) {
-      // This Google URL is assigned with MAC, so we don't handle this request
+  // We have to check with every request if the requested URL is assigned with MAC
+  // because the user can assign URLs at any given time (needs MAC Events)
+  if (macAddonEnabled) {
+    const macAssigned = await getMACAssignment(options.url);
+    if (macAssigned) {
+      // This URL is assigned with MAC, so we don't handle this request
       return;
     }
   }
@@ -123,6 +167,9 @@ async function containGoogle (options) {
       // See https://github.com/mozilla/contain-google/issues/23
       // Sometimes this add-on is installed but doesn't get a googleCookieStoreId ?
       if (googleCookieStoreId) {
+        if (shouldCancelEarly(tab, options)) {
+          return {cancel: true};
+        }
         browser.tabs.create({
           url: requestUrl.toString(),
           cookieStoreId: googleCookieStoreId,
@@ -135,6 +182,9 @@ async function containGoogle (options) {
     }
   } else {
     if (tabCookieStoreId === googleCookieStoreId) {
+      if (shouldCancelEarly(tab, options)) {
+        return {cancel: true};
+      }
       browser.tabs.create({
         url: requestUrl.toString(),
         active: tab.active,
@@ -156,4 +206,16 @@ async function containGoogle (options) {
 
   // Add the request listener
   browser.webRequest.onBeforeRequest.addListener(containGoogle, {urls: ["<all_urls>"], types: ["main_frame"]}, ["blocking"]);
+
+  // Clean up canceled requests
+  browser.webRequest.onCompleted.addListener((options) => {
+    if (canceledRequests[options.tabId]) {
+     delete canceledRequests[options.tabId];
+    }
+  },{urls: ["<all_urls>"], types: ["main_frame"]});
+  browser.webRequest.onErrorOccurred.addListener((options) => {
+    if (canceledRequests[options.tabId]) {
+      delete canceledRequests[options.tabId];
+    }
+  },{urls: ["<all_urls>"], types: ["main_frame"]});
 })();
