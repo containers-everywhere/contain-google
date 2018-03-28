@@ -83,14 +83,23 @@ async function isGoogleAlreadyAssignedInMAC () {
         // See https://github.com/mozilla/contain-facebook/issues/23
         // Sometimes this add-on is installed but doesn't get a googleCookieStoreId ?
         if (googleCookieStoreId) {
-          browser.tabs.create({url: requestUrl.toString(), cookieStoreId: googleCookieStoreId});
+          browser.tabs.create({
+            url: requestUrl.toString(),
+            cookieStoreId: googleCookieStoreId,
+            active: tab.active,
+            index: tab.index
+          });
           browser.tabs.remove(options.tabId);
           return {cancel: true};
         }
       }
     } else {
       if (tabCookieStoreId === googleCookieStoreId) {
-        browser.tabs.create({url: requestUrl.toString()});
+        browser.tabs.create({
+          url: requestUrl.toString(),
+          active: tab.active,
+          index: tab.index
+        });
         browser.tabs.remove(options.tabId);
         return {cancel: true};
       }
