@@ -36,7 +36,7 @@ async function isGoogleAlreadyAssignedInMAC () {
     return;
   }
 
-  // Clear all facebook cookies
+  // Clear all google cookies
   for (let googleDomain of GOOGLE_DOMAINS) {
     googleHostREs.push(new RegExp(`^(.*)?${googleDomain}$`));
     const googleCookieUrl = `https://${googleDomain}/`;
@@ -48,7 +48,7 @@ async function isGoogleAlreadyAssignedInMAC () {
     });
   }
 
-  // Use existing Facebook container, or create one
+  // Use existing Google container, or create one
   browser.contextualIdentities.query({name: GOOGLE_CONTAINER_NAME}).then(contexts => {
     if (contexts.length > 0) {
       googleCookieStoreId = contexts[0].cookieStoreId;
@@ -63,7 +63,7 @@ async function isGoogleAlreadyAssignedInMAC () {
     }
   });
 
-  // Listen to requests and open Facebook into its Container,
+  // Listen to requests and open Google into its Container,
   // open other sites into the default tab context
   async function containGoogle(options) {
     const requestUrl = new URL(options.url);
@@ -79,7 +79,7 @@ async function isGoogleAlreadyAssignedInMAC () {
     if (isGoogle) {
       if (tabCookieStoreId !== googleCookieStoreId && !tab.incognito) {
         // See https://github.com/mozilla/contain-facebook/issues/23
-        // Sometimes this add-on is installed but doesn't get a facebookCookieStoreId ?
+        // Sometimes this add-on is installed but doesn't get a googleCookieStoreId ?
         if (googleCookieStoreId) {
           browser.tabs.create({url: requestUrl.toString(), cookieStoreId: googleCookieStoreId});
           browser.tabs.remove(options.tabId);
