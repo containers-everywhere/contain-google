@@ -1,16 +1,14 @@
 // Param values from https://developer.mozilla.org/Add-ons/WebExtensions/API/contextualIdentities/create
-const FACEBOOK_CONTAINER_NAME = "Facebook";
-const FACEBOOK_CONTAINER_COLOR = "blue";
-const FACEBOOK_CONTAINER_ICON = "briefcase";
-const FACEBOOK_DOMAINS = ["facebook.com", "www.facebook.com", "fb.com"];
+const GOOGLE_CONTAINER_NAME = "Google";
+const GOOGLE_CONTAINER_COLOR = "red";
+const GOOGLE_CONTAINER_ICON = "briefcase";
+const GOOGLE_DOMAINS = ["google.com", "google.ch", "google.de", "google.at", "youtube.com"];
 
 const MAC_ADDON_ID = "@testpilot-containers";
 
-let facebookCookieStoreId = null;
+let googleCookieStoreId = null;
 
-const facebookHostREs = [];
-
-async function isFacebookAlreadyAssignedInMAC () {
+async function isGoogleAlreadyAssignedInMAC () {
   let macAddonInfo;
   // If the MAC add-on isn't installed, return false
   try {
@@ -18,78 +16,78 @@ async function isFacebookAlreadyAssignedInMAC () {
   } catch (e) {
     return false;
   }
-  let anyFBDomainsAssigned = false;
-  for (let facebookDomain of FACEBOOK_DOMAINS) {
-    const facebookCookieUrl = `https://${facebookDomain}/`;
+  let anyGoogleDomainsAssigned = false;
+  for (let googleDomain of GOOGLE_DOMAINS) {
+    const googleCookieUrl = `https://${googleDomain}/`;
     const assignment = await browser.runtime.sendMessage(MAC_ADDON_ID, {
       method: "getAssignment",
-      url: facebookCookieUrl
+      url: googleCookieUrl
     });
     if (assignment) {
-      anyFBDomainsAssigned = true;
+      anyGoogleDomainsAssigned = true;
     }
   }
-  return anyFBDomainsAssigned;
+  return anyGoogleDomainsAssigned;
 }
 
 (async function init() {
-  const facebookAlreadyAssigned = await isFacebookAlreadyAssignedInMAC();
-  if (facebookAlreadyAssigned) {
+  const googleAlreadyAssigned = await isGoogleAlreadyAssignedInMAC();
+  if (googleAlreadyAssigned) {
     return;
   }
 
   // Clear all facebook cookies
-  for (let facebookDomain of FACEBOOK_DOMAINS) {
-    facebookHostREs.push(new RegExp(`^(.*)?${facebookDomain}$`));
-    const facebookCookieUrl = `https://${facebookDomain}/`;
+  for (let googleDomain of GOOGLE_DOMAINS) {
+    googleHostREs.push(new RegExp(`^(.*)?${googleDomain}$`));
+    const googleCookieUrl = `https://${googleDomain}/`;
 
-    browser.cookies.getAll({domain: facebookDomain}).then(cookies => {
+    browser.cookies.getAll({domain: googleDomain}).then(cookies => {
       for (let cookie of cookies) {
-        browser.cookies.remove({name: cookie.name, url: facebookCookieUrl});
+        browser.cookies.remove({name: cookie.name, url: googleCookieUrl});
       }
     });
   }
 
   // Use existing Facebook container, or create one
-  browser.contextualIdentities.query({name: FACEBOOK_CONTAINER_NAME}).then(contexts => {
+  browser.contextualIdentities.query({name: GOOGLE_CONTAINER_NAME}).then(contexts => {
     if (contexts.length > 0) {
-      facebookCookieStoreId = contexts[0].cookieStoreId;
+      googleCookieStoreId = contexts[0].cookieStoreId;
     } else {
       browser.contextualIdentities.create({
-        name: FACEBOOK_CONTAINER_NAME,
-        color: FACEBOOK_CONTAINER_COLOR,
-        icon: FACEBOOK_CONTAINER_ICON}
+        name: GOOGLE_CONTAINER_NAME,
+        color: GOOGLE_CONTAINER_COLOR,
+        icon: GOOGLE_CONTAINER_ICON}
       ).then(context => {
-        facebookCookieStoreId = context.cookieStoreId;
+        googleCookieStoreId = context.cookieStoreId;
       });
     }
   });
 
   // Listen to requests and open Facebook into its Container,
   // open other sites into the default tab context
-  async function containFacebook(options) {
+  async function containGoogle(options) {
     const requestUrl = new URL(options.url);
-    let isFacebook = false;
-    for (let facebookHostRE of facebookHostREs) {
-      if (facebookHostRE.test(requestUrl.host)) {
-        isFacebook = true;
+    let isGoogle = false;
+    for (let googleHostRE of googleHostREs) {
+      if (googleHostRE.test(requestUrl.host)) {
+        isGoogle = true;
         break;
       }
     }
     const tab = await browser.tabs.get(options.tabId);
     const tabCookieStoreId = tab.cookieStoreId;
-    if (isFacebook) {
-      if (tabCookieStoreId !== facebookCookieStoreId && !tab.incognito) {
+    if (isGoogle) {
+      if (tabCookieStoreId !== googleCookieStoreId && !tab.incognito) {
         // See https://github.com/mozilla/contain-facebook/issues/23
         // Sometimes this add-on is installed but doesn't get a facebookCookieStoreId ?
-        if (facebookCookieStoreId) {
-          browser.tabs.create({url: requestUrl.toString(), cookieStoreId: facebookCookieStoreId});
+        if (googleCookieStoreId) {
+          browser.tabs.create({url: requestUrl.toString(), cookieStoreId: googleCookieStoreId});
           browser.tabs.remove(options.tabId);
           return {cancel: true};
         }
       }
     } else {
-      if (tabCookieStoreId === facebookCookieStoreId) {
+      if (tabCookieStoreId === googleCookieStoreId) {
         browser.tabs.create({url: requestUrl.toString()});
         browser.tabs.remove(options.tabId);
         return {cancel: true};
@@ -98,5 +96,5 @@ async function isFacebookAlreadyAssignedInMAC () {
   }
 
   // Add the request listener
-  browser.webRequest.onBeforeRequest.addListener(containFacebook, {urls: ["<all_urls>"], types: ["main_frame"]}, ["blocking"]);
+  browser.webRequest.onBeforeRequest.addListener(containGoogle, {urls: ["<all_urls>"], types: ["main_frame"]}, ["blocking"]);
 })();
