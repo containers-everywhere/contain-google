@@ -8,6 +8,8 @@ const MAC_ADDON_ID = "@testpilot-containers";
 
 let googleCookieStoreId = null;
 
+const googleHostREs = [];
+
 async function isGoogleAlreadyAssignedInMAC () {
   let macAddonInfo;
   // If the MAC add-on isn't installed, return false
