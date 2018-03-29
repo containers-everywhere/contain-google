@@ -197,7 +197,8 @@ async function containGoogle (options) {
           url: requestUrl.toString(),
           cookieStoreId: googleCookieStoreId,
           active: tab.active,
-          index: tab.index
+          index: tab.index,
+          windowId: tab.windowId
         });
         browser.tabs.remove(options.tabId);
         return {cancel: true};
@@ -211,7 +212,8 @@ async function containGoogle (options) {
       browser.tabs.create({
         url: requestUrl.toString(),
         active: tab.active,
-        index: tab.index
+        index: tab.index,
+        windowId: tab.windowId
       });
       browser.tabs.remove(options.tabId);
       return {cancel: true};
