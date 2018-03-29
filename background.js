@@ -61,7 +61,7 @@ async function getMACAssignment (url) {
 
 function generateGoogleHostREs () {
   for (let googleDomain of GOOGLE_DOMAINS) {
-    googleHostREs.push(new RegExp(`^(.*)?${googleDomain}$`));
+    googleHostREs.push(new RegExp(`^(.*\\.)?${googleDomain}$`));
   }
 }
 
