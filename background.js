@@ -2,7 +2,12 @@
 const GOOGLE_CONTAINER_NAME = "Google";
 const GOOGLE_CONTAINER_COLOR = "red";
 const GOOGLE_CONTAINER_ICON = "briefcase";
-const GOOGLE_DOMAINS = ["google.com", "google.ch", "google.de", "google.at", "youtube.com"];
+const GOOGLE_DOMAINS = [
+  "google.com", "google.ch", "google.de", "google.at", "youtube.com", "google.sk", "google.cz",
+  "google.pl", "google.hu", "google.it"
+  // Some more Google owned websites
+  "blogger.com", "doubleclickbygoogle.com"
+];
 
 const MAC_ADDON_ID = "@testpilot-containers";
 
