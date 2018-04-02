@@ -109,17 +109,36 @@ function generateGoogleHostREs () {
   }
 }
 
-function clearGoogleCookies () {
+async function clearGoogleCookies () {
   // Clear all google cookies
-  for (let googleDomain of GOOGLE_DOMAINS) {
-    const googleCookieUrl = `https://${googleDomain}/`;
+  const containers = await browser.contextualIdentities.query({});
+  containers.push({
+    cookieStoreId: 'firefox-default'
+  });
+  containers.map(container => {
+    const storeId = container.cookieStoreId;
+    if (storeId === googleCookieStoreId) {
+      // Don't clear cookies in the Google Container
+      return;
+    }
 
-    browser.cookies.getAll({domain: googleDomain}).then(cookies => {
-      for (let cookie of cookies) {
-        browser.cookies.remove({name: cookie.name, url: googleCookieUrl});
-      }
+    GOOGLE_DOMAINS.map(async googleDomain => {
+      const googleCookieUrl = `https://${googleDomain}/`;
+
+      const cookies = await browser.cookies.getAll({
+        domain: googleDomain,
+        storeId
+      });
+
+      cookies.map(cookie => {
+        browser.cookies.remove({
+          name: cookie.name,
+          url: googleCookieUrl,
+          storeId
+        });
+      });
     });
-  }
+  });
 }
 
 async function setupContainer () {
@@ -200,9 +219,9 @@ async function containGoogle (options) {
   await setupMACAddonManagementListeners();
   macAddonEnabled = await isMACAddonEnabled();
 
+  await setupContainer();
   clearGoogleCookies();
   generateGoogleHostREs();
-  await setupContainer();
 
   // Add the request listener
   browser.webRequest.onBeforeRequest.addListener(containGoogle, {urls: ["<all_urls>"], types: ["main_frame"]}, ["blocking"]);
