@@ -123,15 +123,32 @@ async function clearGoogleCookies () {
   containers.push({
     cookieStoreId: "firefox-default"
   });
-  containers.map(container => {
-    const storeId = container.cookieStoreId;
-    if (storeId === googleCookieStoreId) {
-      // Don't clear cookies in the Google Container
+
+  let macAssignments = [];
+  if (macAddonEnabled) {
+    const promises = GOOGLE_DOMAINS.map(async googleDomain => {
+      const assigned = await getMACAssignment(`https://${googleDomain}/`);
+      return assigned ? googleDomain : null;
+    });
+    macAssignments = await Promise.all(promises);
+  }
+
+  GOOGLE_DOMAINS.map(async googleDomain => {
+    const googleCookieUrl = `https://${googleDomain}/`;
+
+    // dont clear cookies for googleDomain if mac assigned (with or without www.)
+    if (macAddonEnabled &&
+        (macAssignments.includes(googleDomain) ||
+         macAssignments.includes(`www.${googleDomain}`))) {
       return;
     }
 
-    GOOGLE_DOMAINS.map(async googleDomain => {
-      const googleCookieUrl = `https://${googleDomain}/`;
+    containers.map(async container => {
+      const storeId = container.cookieStoreId;
+      if (storeId === googleCookieStoreId) {
+        // Don't clear cookies in the Google Container
+        return;
+      }
 
       const cookies = await browser.cookies.getAll({
         domain: googleDomain,
@@ -159,7 +176,7 @@ async function setupContainer () {
       name: GOOGLE_CONTAINER_NAME,
       color: GOOGLE_CONTAINER_COLOR,
       icon: GOOGLE_CONTAINER_ICON
-    })
+    });
     googleCookieStoreId = context.cookieStoreId;
   }
 }
