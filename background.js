@@ -23,15 +23,20 @@ const ALPHABET_DOMAINS = [
   "abc.xyz", "waze.com", "capitalg.com", "gv.com", "calicolabs.com", "x.company", "nest.com", "sidewalklabs.com", "verily.com"
 ];
 
+const AD_DOMAINS = [
+  "doubleclickbygoogle.com", "feedburner.com", "doubleclick.com", "adwords.com", "adsense.com", "admob.com", "advertisercommunity.com",
+  "googlesyndication.com", "googlecommerce.com", "googlebot.com", "googleapps.com", "googleadservices.com", "gmodules.com", "googl.com", 
+  "1e100.net", "domains.google", "gv.com",
+];
 
-const DEVELOPEER_DOMAINS = [
+const DEVELOPER_DOMAINS = [
   "madewithcode.com", "design.google", "gallery.io", "domains.google", "material.io", "android.com", "chromium.org", "cobrasearch.com", "chromecast.com", "chrome.com", "chromebook.com", "madewithcode.com", "whatbrowser.org", "withgoogle.com",
 ];
 
 
 GOOGLE_DOMAINS = GOOGLE_DOMAINS.concat(GOOGLE_INTL_DOMAINS)
   .concat(GOOGLE_SERVICES).concat(YOUTUBE_DOMAINS).concat(BLOGSPOT_DOMAINS).concat(ALPHABET_DOMAINS)
-  .concat(DEVELOPEER_DOMAINS);
+  .concat(DEVELOPER_DOMAINS).concat(AD_DOMAINS);
 
 
 
