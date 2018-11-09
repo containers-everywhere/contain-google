@@ -3,7 +3,7 @@ const GOOGLE_CONTAINER_NAME = "Google";
 const GOOGLE_CONTAINER_COLOR = "red";
 const GOOGLE_CONTAINER_ICON = "briefcase";
 let GOOGLE_DOMAINS = [
-  "google.com",  "google.org", "googleapis.com", "g.co", "ggpht.com",
+  "google.com", "google.org", "googleapis.com", "g.co", "ggpht.com",
   "blogger.com", "googleblog.com", "blog.google", "googleusercontent.com", "googlesource.com",
   "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "duck.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", 
 ];
@@ -13,7 +13,7 @@ const GOOGLE_INTL_DOMAINS = [
 ];
 
 const GOOGLE_SERVICES = [
-"like.com",  "keyhole.com", "panoramio.com", "picasa.com", "urchin.com", "igoogle.com", "foofle.com", "froogle.com", "localguidesconnect.com", "googlemail.com", "googleanalytics.com", "google-analytics.com", "googletagmanager.com", "googlecode.com", "googlesource.com", "googledrive.com", "googlearth.com", "googleearth.com", "googlemaps.com", "googlepagecreator.com", "googlescholar.com", 
+"like.com", "keyhole.com", "panoramio.com", "picasa.com", "urchin.com", "igoogle.com", "foofle.com", "froogle.com", "localguidesconnect.com", "googlemail.com", "googleanalytics.com", "google-analytics.com", "googletagmanager.com", "googlecode.com", "googlesource.com", "googledrive.com", "googlearth.com", "googleearth.com", "googlemaps.com", "googlepagecreator.com", "googlescholar.com", "advertisercommunity.com", "thinkwithgoogle.com",
 ];
 const YOUTUBE_DOMAINS = [
   "youtube.com", "youtu.be", "yt.be", "ytimg.com", " youtube-nocookie.com", "youtubegaming.com", "youtubeeducation.com", "youtube-nocookie.com",
