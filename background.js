@@ -33,6 +33,10 @@ const DEVELOPER_DOMAINS = [
   "madewithcode.com", "design.google", "gallery.io", "domains.google", "material.io", "android.com", "chromium.org", "cobrasearch.com", "chromecast.com", "chrome.com", "chromebook.com", "madewithcode.com", "whatbrowser.org", "withgoogle.com", "web.dev",
 ];
 
+const SEARCHPAGE_PATHS = [
+  "/search", "/maps", "/flights"
+]
+
 
 GOOGLE_DOMAINS = GOOGLE_DOMAINS.concat(GOOGLE_INTL_DOMAINS)
   .concat(GOOGLE_SERVICES).concat(YOUTUBE_DOMAINS).concat(BLOGSPOT_DOMAINS).concat(ALPHABET_DOMAINS)
@@ -44,10 +48,12 @@ const MAC_ADDON_ID = "@testpilot-containers";
 
 let macAddonEnabled = false;
 let googleCookieStoreId = null;
+let extensionSettings = {};
 
 const canceledRequests = {};
 const tabsWaitingToLoad = {};
 const googleHostREs = [];
+const youtubeHostREs = [];
 
 async function isMACAddonEnabled () {
   try {
@@ -147,6 +153,13 @@ function generateGoogleHostREs () {
   for (let googleDomain of GOOGLE_DOMAINS) {
     googleHostREs.push(new RegExp(`^(.*\\.)?${googleDomain}$`));
   }
+  for (let youtubeDomain of YOUTUBE_DOMAINS) {
+    youtubeHostREs.push(new RegExp(`^(.*\\.)?${youtubeDomain}$`));
+  }
+}
+
+async function loadExtensionSettings () {
+  extensionSettings = await browser.storage.sync.get();
 }
 
 async function clearGoogleCookies () {
@@ -228,7 +241,25 @@ function isGoogleURL (url) {
   const parsedUrl = new URL(url);
   for (let googleHostRE of googleHostREs) {
     if (googleHostRE.test(parsedUrl.host)) {
-      return true;
+
+      // Ignore nothing when all ignore-settings are disabled
+      if (! extensionSettings.ignore_searchpages && ! extensionSettings.ignore_youtube) {
+        return true;
+	  }
+
+      // Ignore YouTube host when setting is enabled and host matches
+      if (extensionSettings.ignore_youtube) {
+        for (let youtubeHostRE of youtubeHostREs) {
+          if (youtubeHostRE.test(parsedUrl.host)) {
+            return false;
+          }
+        }
+	  }
+
+      // Ignore search page when setting is enabled and path matches
+      if (extensionSettings.ignore_searchpages && ! SEARCHPAGE_PATHS.includes(parsedUrl.pathname)) {
+        return true;
+	  }
     }
   }
   return false;
@@ -376,6 +407,7 @@ async function containGoogle (options) {
     console.log(error);
     return;
   }
+  loadExtensionSettings();
   clearGoogleCookies();
   generateGoogleHostREs();
 

@@ -26,10 +26,16 @@
         "management",
         "tabs",
         "webRequestBlocking",
-        "webRequest"
+        "webRequest",
+        "storage"
     ],
 
     "background": {
         "scripts": ["background.js"]
+    },
+    
+    "options_ui": {
+        "page": "options.html",
+        "browser_style": true
     }
 }
