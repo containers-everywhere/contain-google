@@ -54,6 +54,7 @@ const canceledRequests = {};
 const tabsWaitingToLoad = {};
 const googleHostREs = [];
 const youtubeHostREs = [];
+const searchpagePathREs = [];
 
 async function isMACAddonEnabled () {
   try {
@@ -156,6 +157,9 @@ function generateGoogleHostREs () {
   for (let youtubeDomain of YOUTUBE_DOMAINS) {
     youtubeHostREs.push(new RegExp(`^(.*\\.)?${youtubeDomain}$`));
   }
+  for (let searchpagePath of SEARCHPAGE_PATHS) {
+    searchpagePathREs.push(new RegExp(`^${searchpagePath}(.*)`));
+  }
 }
 
 async function loadExtensionSettings () {
@@ -241,25 +245,27 @@ function isGoogleURL (url) {
   const parsedUrl = new URL(url);
   for (let googleHostRE of googleHostREs) {
     if (googleHostRE.test(parsedUrl.host)) {
+      return true;
+    }
+  }
+  return false;
+}
 
-      // Ignore nothing when all ignore-settings are disabled
-      if (! extensionSettings.ignore_searchpages && ! extensionSettings.ignore_youtube) {
-        return true;
-	  }
+function isYouTubeURL (url) {
+  const parsedUrl = new URL(url);
+  for (let youtubeHostRE of youtubeHostREs) {
+    if (youtubeHostRE.test(parsedUrl.host)) {
+      return true;
+    }
+  }
+  return false;
+}
 
-      // Ignore YouTube host when setting is enabled and host matches
-      if (extensionSettings.ignore_youtube) {
-        for (let youtubeHostRE of youtubeHostREs) {
-          if (youtubeHostRE.test(parsedUrl.host)) {
-            return false;
-          }
-        }
-	  }
-
-      // Ignore search page when setting is enabled and path matches
-      if (extensionSettings.ignore_searchpages && ! SEARCHPAGE_PATHS.includes(parsedUrl.pathname)) {
-        return true;
-	  }
+function isSearchPageURL (url) {
+  const parsedUrl = new URL(url);
+  for (let searchpagePathRE of searchpagePathREs) {
+    if (searchpagePathRE.test(parsedUrl.pathname)) {
+      return true;
     }
   }
   return false;
@@ -271,7 +277,17 @@ function shouldContainInto (url, tab) {
     return false;
   }
 
-  if (isGoogleURL(url)) {
+  let handleUrl = isGoogleURL(url);
+
+  if (extensionSettings.ignore_youtube && isYouTubeURL(url)) {
+    handleUrl = false;
+  }
+
+  if (extensionSettings.ignore_searchpages && isSearchPageURL(url)) {
+    handleUrl = false;
+  }
+
+  if (handleUrl) {
     if (tab.cookieStoreId !== googleCookieStoreId) {
       // Google-URL outside of Google Container Tab
       // Should contain into Google Container
