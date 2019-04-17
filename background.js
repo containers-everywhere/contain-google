@@ -33,6 +33,10 @@ const DEVELOPER_DOMAINS = [
   "madewithcode.com", "design.google", "gallery.io", "domains.google", "material.io", "android.com", "chromium.org", "cobrasearch.com", "chromecast.com", "chrome.com", "chromebook.com", "madewithcode.com", "whatbrowser.org", "withgoogle.com", "web.dev",
 ];
 
+const SEARCHPAGE_PATHS = [
+  "/search", "/maps", "/flights"
+]
+
 
 GOOGLE_DOMAINS = GOOGLE_DOMAINS.concat(GOOGLE_INTL_DOMAINS)
   .concat(GOOGLE_SERVICES).concat(YOUTUBE_DOMAINS).concat(BLOGSPOT_DOMAINS).concat(ALPHABET_DOMAINS)
@@ -44,10 +48,13 @@ const MAC_ADDON_ID = "@testpilot-containers";
 
 let macAddonEnabled = false;
 let googleCookieStoreId = null;
+let extensionSettings = {};
 
 const canceledRequests = {};
 const tabsWaitingToLoad = {};
 const googleHostREs = [];
+const youtubeHostREs = [];
+const searchpagePathREs = [];
 
 async function isMACAddonEnabled () {
   try {
@@ -147,6 +154,16 @@ function generateGoogleHostREs () {
   for (let googleDomain of GOOGLE_DOMAINS) {
     googleHostREs.push(new RegExp(`^(.*\\.)?${googleDomain}$`));
   }
+  for (let youtubeDomain of YOUTUBE_DOMAINS) {
+    youtubeHostREs.push(new RegExp(`^(.*\\.)?${youtubeDomain}$`));
+  }
+  for (let searchpagePath of SEARCHPAGE_PATHS) {
+    searchpagePathREs.push(new RegExp(`^${searchpagePath}(.*)`));
+  }
+}
+
+async function loadExtensionSettings () {
+  extensionSettings = await browser.storage.sync.get();
 }
 
 async function clearGoogleCookies () {
@@ -234,13 +251,43 @@ function isGoogleURL (url) {
   return false;
 }
 
+function isYouTubeURL (url) {
+  const parsedUrl = new URL(url);
+  for (let youtubeHostRE of youtubeHostREs) {
+    if (youtubeHostRE.test(parsedUrl.host)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function isSearchPageURL (url) {
+  const parsedUrl = new URL(url);
+  for (let searchpagePathRE of searchpagePathREs) {
+    if (searchpagePathRE.test(parsedUrl.pathname)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function shouldContainInto (url, tab) {
   if (!url.startsWith("http")) {
     // we only handle URLs starting with http(s)
     return false;
   }
 
-  if (isGoogleURL(url)) {
+  let handleUrl = isGoogleURL(url);
+
+  if (extensionSettings.ignore_youtube && isYouTubeURL(url)) {
+    handleUrl = false;
+  }
+
+  if (extensionSettings.ignore_searchpages && isSearchPageURL(url)) {
+    handleUrl = false;
+  }
+
+  if (handleUrl) {
     if (tab.cookieStoreId !== googleCookieStoreId) {
       // Google-URL outside of Google Container Tab
       // Should contain into Google Container
@@ -376,6 +423,7 @@ async function containGoogle (options) {
     console.log(error);
     return;
   }
+  loadExtensionSettings();
   clearGoogleCookies();
   generateGoogleHostREs();
 
