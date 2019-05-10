@@ -5,7 +5,9 @@ function onOptionsPageSave(e)
 	// Save settings
 	browser.storage.sync.set({
 		"ignore_youtube": document.querySelector("#ignore_youtube").checked,
-		"ignore_searchpages": document.querySelector("#ignore_searchpages").checked
+		"ignore_searchpages": document.querySelector("#ignore_searchpages").checked,
+		"ignore_maps": document.querySelector("#ignore_maps").checked,
+		"ignore_flights": document.querySelector("#ignore_flights").checked
 	});
 
 	browser.runtime.reload();
@@ -19,6 +21,8 @@ function onOptionsPageLoaded()
 	{
 		document.querySelector("#ignore_youtube").checked = res.ignore_youtube || false;
 		document.querySelector("#ignore_searchpages").checked = res.ignore_searchpages || false;
+		document.querySelector("#ignore_maps").checked = res.ignore_maps || false;
+		document.querySelector("#ignore_flights").checked = res.ignore_flights || false;
 	});
 }
 
