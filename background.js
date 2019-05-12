@@ -2,10 +2,11 @@
 const GOOGLE_CONTAINER_NAME = "Google";
 const GOOGLE_CONTAINER_COLOR = "red";
 const GOOGLE_CONTAINER_ICON = "briefcase";
+
 let GOOGLE_DOMAINS = [
   "google.com", "google.org", "googleapis.com", "g.co", "ggpht.com",
   "blogger.com", "googleblog.com", "blog.google", "googleusercontent.com", "googlesource.com",
-  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", 
+  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google",
 ];
 
 const GOOGLE_INTL_DOMAINS = [
@@ -15,17 +16,22 @@ const GOOGLE_INTL_DOMAINS = [
 const GOOGLE_SERVICES = [
 "like.com", "keyhole.com", "panoramio.com", "picasa.com", "urchin.com", "igoogle.com", "foofle.com", "froogle.com", "localguidesconnect.com", "googlemail.com", "googleanalytics.com", "google-analytics.com", "googletagmanager.com", "googlecode.com", "googlesource.com", "googledrive.com", "googlearth.com", "googleearth.com", "googlemaps.com", "googlepagecreator.com", "googlescholar.com", "advertisercommunity.com", "thinkwithgoogle.com",
 ];
+
 const YOUTUBE_DOMAINS = [
-  "youtube.com", "youtu.be", "yt.be", "ytimg.com", " youtube-nocookie.com", "youtubegaming.com", "youtubeeducation.com", "youtube-nocookie.com",
+  "youtube.com", "youtu.be", "yt.be", "ytimg.com", "youtube-nocookie.com", "youtubegaming.com", "youtubeeducation.com",
 ];
-const BLOGSPOT_DOMAINS = ["blogspot.com", "blogspot.ae", "blogspot.al", "blogspot.am", "blogspot.com.ar", "blogspot.co.at", "blogspot.com.au", "blogspot.ba", "blogspot.be", "blogspot.bg", "blogspot.bj", "blogspot.com.br", "blogspot.com.by", "blogspot.ca", "blogspot.cf", "blogspot.ch", "blogspot.cl", "blogspot.com.co", "blogspot.cv", "blogspot.com.cy", "blogspot.cz", "blogspot.de", "blogspot.dj", "blogspot.dk", "blogspot.dm", "blogspot.com.do", "blogspot.dz", "blogspot.com.eg", "blogspot.es", "blogspot.fi", "blogspot.fr", "blogspot.gr", "blogspot.hr", "blogspot.hu", "blogspot.co.id", "blogspot.ie", "blogspot.co.il", "blogspot.in", "blogspot.is", "blogspot.it", "blogspot.jp", "blogspot.co.ke", "blogspot.kr", "blogspot.li", "blogspot.lt", "blogspot.lu", "blogspot.md", "blogspot.mk", "blogspot.com.mt", "blogspot.mx", "blogspot.my", "blogspot.com.ng", "blogspot.nl", "blogspot.no", "blogspot.co.nz", "blogspot.pt", "blogspot.qa", "blogspot.ro", "blogspot.rs", "blogspot.ru", "blogspot.se", "blogspot.sg", "blogspot.si", "blogspot.sk", "blogspot.sn", "blogspot.com.sr", "blogspot.td", "blogspot.co.tl", "blogspot.co.to", "blogspot.com.tr", "blogspot.tw", "blogspot.co.uk", "blogspot.com.uy", "blogspot.co.za", "stackdriver.com"];
+
+const BLOGSPOT_DOMAINS = [
+  "blogspot.com", "blogspot.ae", "blogspot.al", "blogspot.am", "blogspot.com.ar", "blogspot.co.at", "blogspot.com.au", "blogspot.ba", "blogspot.be", "blogspot.bg", "blogspot.bj", "blogspot.com.br", "blogspot.com.by", "blogspot.ca", "blogspot.cf", "blogspot.ch", "blogspot.cl", "blogspot.com.co", "blogspot.cv", "blogspot.com.cy", "blogspot.cz", "blogspot.de", "blogspot.dj", "blogspot.dk", "blogspot.dm", "blogspot.com.do", "blogspot.dz", "blogspot.com.eg", "blogspot.es", "blogspot.fi", "blogspot.fr", "blogspot.gr", "blogspot.hr", "blogspot.hu", "blogspot.co.id", "blogspot.ie", "blogspot.co.il", "blogspot.in", "blogspot.is", "blogspot.it", "blogspot.jp", "blogspot.co.ke", "blogspot.kr", "blogspot.li", "blogspot.lt", "blogspot.lu", "blogspot.md", "blogspot.mk", "blogspot.com.mt", "blogspot.mx", "blogspot.my", "blogspot.com.ng", "blogspot.nl", "blogspot.no", "blogspot.co.nz", "blogspot.pt", "blogspot.qa", "blogspot.ro", "blogspot.rs", "blogspot.ru", "blogspot.se", "blogspot.sg", "blogspot.si", "blogspot.sk", "blogspot.sn", "blogspot.com.sr", "blogspot.td", "blogspot.co.tl", "blogspot.co.to", "blogspot.com.tr", "blogspot.tw", "blogspot.co.uk", "blogspot.com.uy", "blogspot.co.za", "stackdriver.com",
+];
+
 const ALPHABET_DOMAINS = [
-  "abc.xyz", "waze.com", "capitalg.com", "gv.com", "calicolabs.com", "x.company", "nest.com", "sidewalklabs.com", "verily.com"
+  "abc.xyz", "waze.com", "capitalg.com", "gv.com", "calicolabs.com", "x.company", "nest.com", "sidewalklabs.com", "verily.com",
 ];
 
 const AD_DOMAINS = [
   "doubleclickbygoogle.com", "feedburner.com", "doubleclick.com", "doubleclick.net", "adwords.com", "adsense.com", "admob.com", "advertisercommunity.com",
-  "googlesyndication.com", "googlecommerce.com", "googlebot.com", "googleapps.com", "googleadservices.com", "gmodules.com", "googl.com", 
+  "googlesyndication.com", "googlecommerce.com", "googlebot.com", "googleapps.com", "googleadservices.com", "gmodules.com", "googl.com",
   "1e100.net", "domains.google", "gv.com",
 ];
 
@@ -33,16 +39,9 @@ const DEVELOPER_DOMAINS = [
   "madewithcode.com", "design.google", "gallery.io", "domains.google", "material.io", "android.com", "chromium.org", "cobrasearch.com", "chromecast.com", "chrome.com", "chromebook.com", "madewithcode.com", "whatbrowser.org", "withgoogle.com", "web.dev",
 ];
 
-const SEARCHPAGE_PATHS = [
-  "/search", "/maps", "/flights"
-]
-
-
 GOOGLE_DOMAINS = GOOGLE_DOMAINS.concat(GOOGLE_INTL_DOMAINS)
   .concat(GOOGLE_SERVICES).concat(YOUTUBE_DOMAINS).concat(BLOGSPOT_DOMAINS).concat(ALPHABET_DOMAINS)
   .concat(DEVELOPER_DOMAINS).concat(AD_DOMAINS);
-
-
 
 const MAC_ADDON_ID = "@testpilot-containers";
 
@@ -54,7 +53,6 @@ const canceledRequests = {};
 const tabsWaitingToLoad = {};
 const googleHostREs = [];
 const youtubeHostREs = [];
-const searchpagePathREs = [];
 
 async function isMACAddonEnabled () {
   try {
@@ -151,14 +149,15 @@ function shouldCancelEarly (tab, options) {
 }
 
 function generateGoogleHostREs () {
+  const matchOperatorsRegex = /[|\\{}()[\]^$+*?.-]/g;
+
   for (let googleDomain of GOOGLE_DOMAINS) {
-    googleHostREs.push(new RegExp(`^(.*\\.)?${googleDomain}$`));
+    googleDomain = googleDomain.replace(matchOperatorsRegex, '\\$&');
+    googleHostREs.push(new RegExp(`(^|\.)${googleDomain}$`));
   }
   for (let youtubeDomain of YOUTUBE_DOMAINS) {
-    youtubeHostREs.push(new RegExp(`^(.*\\.)?${youtubeDomain}$`));
-  }
-  for (let searchpagePath of SEARCHPAGE_PATHS) {
-    searchpagePathREs.push(new RegExp(`^${searchpagePath}(.*)`));
+    youtubeDomain = youtubeDomain.replace(matchOperatorsRegex, '\\$&');
+    youtubeHostREs.push(new RegExp(`(^|\.)${youtubeDomain}$`));
   }
 }
 
@@ -263,12 +262,17 @@ function isYouTubeURL (url) {
 
 function isSearchPageURL (url) {
   const parsedUrl = new URL(url);
-  for (let searchpagePathRE of searchpagePathREs) {
-    if (searchpagePathRE.test(parsedUrl.pathname)) {
-      return true;
-    }
-  }
-  return false;
+  return parsedUrl.pathname.startsWith('/search');
+}
+
+function isMapsURL (url) {
+  const parsedUrl = new URL(url);
+  return parsedUrl.pathname.startsWith('/maps');
+}
+
+function isFlightsURL (url) {
+  const parsedUrl = new URL(url);
+  return parsedUrl.pathname.startsWith('/flights');
 }
 
 function shouldContainInto (url, tab) {
@@ -279,11 +283,19 @@ function shouldContainInto (url, tab) {
 
   let handleUrl = isGoogleURL(url);
 
-  if (extensionSettings.ignore_youtube && isYouTubeURL(url)) {
+  if (handleUrl && extensionSettings.ignore_youtube && isYouTubeURL(url)) {
     handleUrl = false;
   }
 
-  if (extensionSettings.ignore_searchpages && isSearchPageURL(url)) {
+  if (handleUrl && extensionSettings.ignore_searchpages && isSearchPageURL(url)) {
+    handleUrl = false;
+  }
+
+  if (handleUrl && extensionSettings.ignore_maps && isMapsURL(url)) {
+    handleUrl = false;
+  }
+
+  if (handleUrl && extensionSettings.ignore_flights && isFlightsURL(url)) {
     handleUrl = false;
   }
 

@@ -8,11 +8,11 @@
 
 <body>
 	<form>
-	
+
 		<h1>Settings</h1>
-		
+
 		<hr>
-		
+
 		<p>
 			<label>
 				<input type="checkbox" id="ignore_youtube" value="1">
@@ -20,19 +20,35 @@
 				<em>(Means don't use Google Container for YouTube sites.)<em>
 			</label>
 		</p>
-		
+
 		<p>
 			<label>
 				<input type="checkbox" id="ignore_searchpages" value="1">
 				Ignore search pages<br>
-				<em>(Means don't use Google Container on Google sites with a path of <code>/search</code>, <code>/maps</code> or <code>/flights</code>.)<em>
+				<em>(Means don't use Google Container on Google sites with a path of <code>/search</code>.)<em>
+			</label>
+		</p>
+
+		<p>
+			<label>
+				<input type="checkbox" id="ignore_maps" value="1">
+				Ignore maps pages<br>
+				<em>(Means don't use Google Container on Google sites with a path of <code>/maps</code>.)<em>
+			</label>
+		</p>
+
+		<p>
+			<label>
+				<input type="checkbox" id="ignore_flights" value="1">
+				Ignore flights pages<br>
+				<em>(Means don't use Google Container on Google sites with a path of <code>/flights</code>.)<em>
 			</label>
 		</p>
 
 		<button type="submit">Save settings</button>
-		
+
 		<hr>
-		
+
 	</form>
 	<script src="options.js"></script>
 </body>
