@@ -14,7 +14,7 @@ const GOOGLE_INTL_DOMAINS = [
 ];
 
 const GOOGLE_SERVICES = [
-"like.com", "keyhole.com", "panoramio.com", "picasa.com", "urchin.com", "igoogle.com", "foofle.com", "froogle.com", "localguidesconnect.com", "googlemail.com", "googleanalytics.com", "google-analytics.com", "googletagmanager.com", "googlecode.com", "googlesource.com", "googledrive.com", "googlearth.com", "googleearth.com", "googlemaps.com", "googlepagecreator.com", "googlescholar.com", "advertisercommunity.com", "thinkwithgoogle.com",
+"like.com", "keyhole.com", "panoramio.com", "picasa.com", "urchin.com", "igoogle.com", "foofle.com", "froogle.com", "localguidesconnect.com", "googlemail.com", "googleanalytics.com", "google-analytics.com", "googletagmanager.com", "googlecode.com", "googlesource.com", "googledrive.com", "googlearth.com", "googleearth.com", "googlemaps.com", "googlepagecreator.com", "googlescholar.com", "advertisercommunity.com", "thinkwithgoogle.com", "googlegroups.com",
 ];
 
 const YOUTUBE_DOMAINS = [
