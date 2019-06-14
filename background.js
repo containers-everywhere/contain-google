@@ -32,7 +32,7 @@ const ALPHABET_DOMAINS = [
 const AD_DOMAINS = [
   "doubleclickbygoogle.com", "feedburner.com", "doubleclick.com", "doubleclick.net", "adwords.com", "adsense.com", "admob.com", "advertisercommunity.com",
   "googlesyndication.com", "googlecommerce.com", "googlebot.com", "googleapps.com", "googleadservices.com", "gmodules.com", "googl.com",
-  "1e100.net", "domains.google", "gv.com",
+  "1e100.net", "domains.google", "gv.com", "googletraveladservices.com",
 ];
 
 const DEVELOPER_DOMAINS = [
