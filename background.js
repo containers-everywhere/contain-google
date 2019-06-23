@@ -275,6 +275,16 @@ function isFlightsURL (url) {
   return parsedUrl.pathname.startsWith('/flights');
 }
 
+function isOauthURL(url) {
+  const parsedUrl = new URL(url);
+  return = (
+    parsedUrl.pathname.startsWith('/signin/oauth') ||
+    parsedUrl.pathname.startsWith('/signin/v2') ||
+    parsedUrl.pathname.startsWith('/o/oauth2') ||
+    parsedUrl.pathname.startsWith('/CheckCookie')
+  )
+}
+
 function shouldContainInto (url, tab) {
   if (!url.startsWith("http")) {
     // we only handle URLs starting with http(s)
@@ -296,6 +306,10 @@ function shouldContainInto (url, tab) {
   }
 
   if (handleUrl && extensionSettings.ignore_flights && isFlightsURL(url)) {
+    handleUrl = false;
+  }
+
+  if (handleUrl && extensionSettings.ignore_oauth && isOauthURL(url)) {
     handleUrl = false;
   }
 
