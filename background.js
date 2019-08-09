@@ -234,10 +234,14 @@ function reopenTab ({url, tab, cookieStoreId}) {
     url,
     cookieStoreId,
     active: tab.active,
-    index: tab.index,
+    index: tab.index + 1,
     windowId: tab.windowId
   });
-  browser.tabs.remove(tab.id);
+  // We do not want to erase google container if going from 
+  // google container back to default.
+  if (cookieStoreId != "firefox-default") {
+    browser.tabs.remove(tab.id);
+  }
 }
 
 function isGoogleURL (url) {
