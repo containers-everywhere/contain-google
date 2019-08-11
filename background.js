@@ -239,7 +239,7 @@ function reopenTab ({url, tab, cookieStoreId}) {
   });
   // We do not want to erase google container if going from 
   // google container back to default.
-  if (cookieStoreId != "firefox-default") {
+  if (!(isSearchPageURL(tab.url))) {
     browser.tabs.remove(tab.id);
   }
 }
