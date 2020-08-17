@@ -153,11 +153,11 @@ function generateGoogleHostREs () {
 
   for (let googleDomain of GOOGLE_DOMAINS) {
     googleDomain = googleDomain.replace(matchOperatorsRegex, '\\$&');
-    googleHostREs.push(new RegExp(`(^|\.)${googleDomain}$`));
+    googleHostREs.push(new RegExp(`(^|\\.)${googleDomain}$`));
   }
   for (let youtubeDomain of YOUTUBE_DOMAINS) {
     youtubeDomain = youtubeDomain.replace(matchOperatorsRegex, '\\$&');
-    youtubeHostREs.push(new RegExp(`(^|\.)${youtubeDomain}$`));
+    youtubeHostREs.push(new RegExp(`(^|\\.)${youtubeDomain}$`));
   }
 }
 
