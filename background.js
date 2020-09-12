@@ -281,7 +281,7 @@ function isFlightsURL (url) {
 
 function isPreferencesURL (url) {
   const parsedUrl = new URL(url);
-  return paresedUrl.pathname.startsWith('/preferences');
+  return parsedUrl.pathname.startsWith('/preferences');
 }
 
 function shouldContainInto (url, tab) {
