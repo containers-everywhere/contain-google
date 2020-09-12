@@ -6,7 +6,7 @@ const GOOGLE_CONTAINER_ICON = "briefcase";
 let GOOGLE_DOMAINS = [
   "google.com", "google.org", "googleapis.com", "g.co", "ggpht.com",
   "blogger.com", "googleblog.com", "blog.google", "googleusercontent.com", "googlesource.com",
-  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", "about.google", "registry.google",
+  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", "about.google", "registry.google", "google",
 ];
 
 const GOOGLE_INTL_DOMAINS = [
@@ -153,11 +153,11 @@ function generateGoogleHostREs () {
 
   for (let googleDomain of GOOGLE_DOMAINS) {
     googleDomain = googleDomain.replace(matchOperatorsRegex, '\\$&');
-    googleHostREs.push(new RegExp(`(^|\.)${googleDomain}$`));
+    googleHostREs.push(new RegExp(`(^|\\.)${googleDomain}$`));
   }
   for (let youtubeDomain of YOUTUBE_DOMAINS) {
     youtubeDomain = youtubeDomain.replace(matchOperatorsRegex, '\\$&');
-    youtubeHostREs.push(new RegExp(`(^|\.)${youtubeDomain}$`));
+    youtubeHostREs.push(new RegExp(`(^|\\.)${youtubeDomain}$`));
   }
 }
 
@@ -279,6 +279,11 @@ function isFlightsURL (url) {
   return parsedUrl.pathname.startsWith('/flights');
 }
 
+function isPreferencesURL (url) {
+  const parsedUrl = new URL(url);
+  return paresedUrl.pathname.startsWith('/preferences');
+}
+
 function shouldContainInto (url, tab) {
   if (!url.startsWith("http")) {
     // we only handle URLs starting with http(s)
@@ -300,6 +305,10 @@ function shouldContainInto (url, tab) {
   }
 
   if (handleUrl && extensionSettings.ignore_flights && isFlightsURL(url)) {
+    handleUrl = false;
+  }
+
+  if (handleUrl && extensionSettings.ignore_preferences && isPreferencesURL(url)) {
     handleUrl = false;
   }
 
