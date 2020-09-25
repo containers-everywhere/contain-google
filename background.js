@@ -305,6 +305,11 @@ function shouldContainInto (url, tab) {
 
   if (handleUrl) {
     if (tab.cookieStoreId !== googleCookieStoreId) {
+      if (tab.cookieStoreId !== "firefox-default" && extensionSettings.dont_override_containers) {
+        // Tab is already in a container, the user doesn't want us to override containers
+        return false;
+      }
+      
       // Google-URL outside of Google Container Tab
       // Should contain into Google Container
       return googleCookieStoreId;
