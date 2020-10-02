@@ -23,6 +23,7 @@ function onOptionsPageLoaded()
 		document.querySelector("#ignore_youtube").checked = res.ignore_youtube || false;
 		document.querySelector("#ignore_searchpages").checked = res.ignore_searchpages || false;
 		document.querySelector("#ignore_maps").checked = res.ignore_maps || false;
+		document.querySelector("#ignore_flights").checked = res.ignore_flights || false;
 		document.querySelector("#dont_override_containers").checked = res.override_containers || false;
 	});
 }
