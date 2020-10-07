@@ -6,7 +6,7 @@ const GOOGLE_CONTAINER_ICON = "briefcase";
 let GOOGLE_DOMAINS = [
   "google.com", "google.org", "googleapis.com", "g.co", "ggpht.com",
   "blogger.com", "googleblog.com", "blog.google", "googleusercontent.com", "googlesource.com",
-  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", "about.google", "registry.google",
+  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", "about.google", "registry.google", "google",
 ];
 
 const GOOGLE_INTL_DOMAINS = [
@@ -305,6 +305,11 @@ function shouldContainInto (url, tab) {
 
   if (handleUrl) {
     if (tab.cookieStoreId !== googleCookieStoreId) {
+      if (tab.cookieStoreId !== "firefox-default" && extensionSettings.dont_override_containers) {
+        // Tab is already in a container, the user doesn't want us to override containers
+        return false;
+      }
+      
       // Google-URL outside of Google Container Tab
       // Should contain into Google Container
       return googleCookieStoreId;
