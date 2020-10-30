@@ -237,7 +237,7 @@ function reopenTab ({url, tab, cookieStoreId}) {
     index: tab.index + 1,
     windowId: tab.windowId
   });
-  // We do not want to erase google container if going from 
+  // We do not want to erase google container if going from
   // google container back to default.
   if (!(isSearchPageURL(tab.url))) {
     browser.tabs.remove(tab.id);
@@ -269,6 +269,16 @@ function isSearchPageURL (url) {
   return parsedUrl.pathname.startsWith('/search');
 }
 
+function isPrefPageURL (url) {
+  const parsedUrl = new URL(url);
+  return parsedUrl.pathname.startsWith('/preferences');
+}
+
+function isSetprefsPageURL (url) {
+  const parsedUrl = new URL(url);
+  return parsedUrl.pathname.startsWith('/setprefs');
+}
+
 function isMapsURL (url) {
   const parsedUrl = new URL(url);
   return parsedUrl.pathname.startsWith('/maps');
@@ -295,6 +305,14 @@ function shouldContainInto (url, tab) {
     handleUrl = false;
   }
 
+  if (handleUrl && extensionSettings.ignore_prefpages && isPrefPageURL(url)) {
+    handleUrl = false;
+  }
+
+  if (handleUrl && extensionSettings.ignore_prefpages && isSetprefsPageURL(url)) {
+    handleUrl = false;
+  }
+
   if (handleUrl && extensionSettings.ignore_maps && isMapsURL(url)) {
     handleUrl = false;
   }
@@ -309,7 +327,7 @@ function shouldContainInto (url, tab) {
         // Tab is already in a container, the user doesn't want us to override containers
         return false;
       }
-      
+
       // Google-URL outside of Google Container Tab
       // Should contain into Google Container
       return googleCookieStoreId;
