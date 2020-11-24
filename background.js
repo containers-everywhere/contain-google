@@ -53,6 +53,7 @@ const canceledRequests = {};
 const tabsWaitingToLoad = {};
 const googleHostREs = [];
 const youtubeHostREs = [];
+const whitelistedHostREs = [];
 
 async function isMACAddonEnabled () {
   try {
@@ -161,6 +162,15 @@ function generateGoogleHostREs () {
   }
 }
 
+function generateWhitelistedHostREs () {
+ if (whitelistedHostREs.length != 0) {return;}
+  const matchOperatorsRegex = /[|\\{}()[\]^$+*?.-]/g;
+  for (let whitelistedDomain of extensionSettings.whitelist) {
+    whitelistedDomain = whitelistedDomain.replace(matchOperatorsRegex, '\\$&');
+    whitelistedHostREs.push(new RegExp(`(^|\\.)${whitelistedDomain}$`));
+  }
+}
+
 async function loadExtensionSettings () {
   extensionSettings = await browser.storage.sync.get();
 }
@@ -264,6 +274,17 @@ function isYouTubeURL (url) {
   return false;
 }
 
+function isWhitelistedURL (url) {
+  generateWhitelistedHostREs();
+  const parsedUrl = new URL(url);
+  for (let whitelistedHostRE of whitelistedHostREs) {
+    if (whitelistedHostRE.test(parsedUrl.host)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function isSearchPageURL (url) {
   const parsedUrl = new URL(url);
   return parsedUrl.pathname.startsWith('/search');
@@ -318,6 +339,10 @@ function shouldContainInto (url, tab) {
   }
 
   if (handleUrl && extensionSettings.ignore_flights && isFlightsURL(url)) {
+    handleUrl = false;
+  }
+
+  if (handleUrl && extensionSettings.whitelist.length!=0 && isWhitelistedURL(url)) {
     handleUrl = false;
   }
 
