@@ -26,7 +26,7 @@ function onOptionsPageLoaded()
 		document.querySelector("#ignore_prefpages").checked = res.ignore_prefpages || false;
 		document.querySelector("#ignore_maps").checked = res.ignore_maps || false;
 		document.querySelector("#ignore_flights").checked = res.ignore_flights || false;
-		document.querySelector("#dont_override_containers").checked = res.override_containers || false;
+		document.querySelector("#dont_override_containers").checked = res.dont_override_containers || false;
 	});
 }
 
