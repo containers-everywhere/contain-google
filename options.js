@@ -1,3 +1,24 @@
+function validate_whitelist() {
+    domain_regex = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/;
+    whitelist_element = document.querySelector("#whitelist");
+    if (whitelist_element.value == "") {return [];}
+    whitelist_domains = whitelist_element.value.split("\n");
+    validated_domains = [];
+    for (whitelist_domain of whitelist_domains) {
+	if (whitelist_domain == "") {continue;}
+	if (whitelist_domain.match(domain_regex)) {validated_domains.push(whitelist_domain); continue;}
+	alert("'" + whitelist_domain + "' is not a valid domain.");
+	return [];
+    }
+    return validated_domains;
+}
+
+function fill_whitelist_option(stored_whitelist) {
+    whitelist_text = stored_whitelist.join("\n");
+    document.querySelector("#whitelist").value = whitelist_text ? whitelist_text : "";
+}
+
+
 function onOptionsPageSave(e)
 {
 	e.preventDefault();
@@ -9,7 +30,8 @@ function onOptionsPageSave(e)
 		"ignore_prefpages": document.querySelector("#ignore_prefpages").checked,
 		"ignore_maps": document.querySelector("#ignore_maps").checked,
 		"ignore_flights": document.querySelector("#ignore_flights").checked,
-		"dont_override_containers": document.querySelector("#dont_override_containers").checked
+	        "dont_override_containers": document.querySelector("#dont_override_containers").checked,
+	        "whitelist": validate_whitelist()
 	});
 
 	browser.runtime.reload();
@@ -27,6 +49,7 @@ function onOptionsPageLoaded()
 		document.querySelector("#ignore_maps").checked = res.ignore_maps || false;
 		document.querySelector("#ignore_flights").checked = res.ignore_flights || false;
 		document.querySelector("#dont_override_containers").checked = res.dont_override_containers || false;
+	        fill_whitelist_option(res.whitelist);
 	});
 }
 
