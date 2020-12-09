@@ -14,7 +14,7 @@ function validate_whitelist() {
 }
 
 function fill_whitelist_option(stored_whitelist) {
-    whitelist_text = stored_whitelist.join("\n");
+    whitelist_text = (stored_whitelist === undefined) ? "" : stored_whitelist.join("\n");
     document.querySelector("#whitelist").value = whitelist_text ? whitelist_text : "";
 }
 
