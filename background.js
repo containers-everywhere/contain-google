@@ -173,6 +173,9 @@ function generateWhitelistedHostREs () {
 
 async function loadExtensionSettings () {
   extensionSettings = await browser.storage.sync.get();
+  if (extensionSettings.whitelist === undefined){
+ 	extensionSettings.whitelist = "";
+  }
 }
 
 async function clearGoogleCookies () {
