@@ -54,6 +54,7 @@ const tabsWaitingToLoad = {};
 const googleHostREs = [];
 const youtubeHostREs = [];
 const whitelistedHostREs = [];
+const allowlistedHostREs = [];
 
 async function isMACAddonEnabled () {
   try {
@@ -171,10 +172,22 @@ function generateWhitelistedHostREs () {
   }
 }
 
+function generateAllowlistedHostREs () {
+ if (allowlistedHostREs.length != 0) {return;}
+  const matchOperatorsRegex = /[|\\{}()[\]^$+*?.-]/g;
+  for (let allowlistedDomain of extensionSettings.allowlist) {
+    allowlistedDomain = allowlistedDomain.replace(matchOperatorsRegex, '\\$&');
+    allowlistedHostREs.push(new RegExp(`(^|\\.)${allowlistedDomain}$`));
+  }
+}
+
 async function loadExtensionSettings () {
   extensionSettings = await browser.storage.sync.get();
   if (extensionSettings.whitelist === undefined){
  	extensionSettings.whitelist = "";
+  }
+  if (extensionSettings.allowlist === undefined){
+ 	extensionSettings.allowlist = "";
   }
 }
 
@@ -288,6 +301,17 @@ function isWhitelistedURL (url) {
   return false;
 }
 
+function isAllowlistedURL (url) {
+  generateAllowlistedHostREs();
+  const parsedUrl = new URL(url);
+  for (let allowlistedHostRE of allowlistedHostREs) {
+    if (allowlistedHostRE.test(parsedUrl.host)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function isSearchPageURL (url) {
   const parsedUrl = new URL(url);
   return parsedUrl.pathname.startsWith('/search');
@@ -347,6 +371,10 @@ function shouldContainInto (url, tab) {
 
   if (handleUrl && extensionSettings.whitelist.length!=0 && isWhitelistedURL(url)) {
     handleUrl = false;
+  }
+
+  if (!handleUrl && extensionSettings.allowlist.length!=0 && isAllowlistedURL(url)) {
+    handleUrl = true;
   }
 
   if (handleUrl) {
