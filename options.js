@@ -30,9 +30,9 @@ function onOptionsPageSave(e)
 		"ignore_prefpages": document.querySelector("#ignore_prefpages").checked,
 		"ignore_maps": document.querySelector("#ignore_maps").checked,
 		"ignore_flights": document.querySelector("#ignore_flights").checked,
-    "dont_override_containers": document.querySelector("#dont_override_containers").checked,
-    "whitelist": validate_list("#whitelist"),
-    "allowlist": validate_list("#allowlist")
+		"dont_override_containers": document.querySelector("#dont_override_containers").checked,
+		"whitelist": validate_list("#whitelist"),
+		"allowlist": validate_list("#allowlist")
 	});
 
 	browser.runtime.reload();
