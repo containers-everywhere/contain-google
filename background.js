@@ -343,7 +343,11 @@ function shouldContainInto (url, tab) {
     return false;
   }
 
-  let handleUrl = isGoogleURL(url);
+  let handleUrl = isGoogleURL(url) || (extensionSettings.allowlist.length!=0 && isAllowlistedURL(url));
+
+  if (handleUrl && extensionSettings.whitelist.length!=0 && isWhitelistedURL(url)) {
+    handleUrl = false;
+  }
 
   if (handleUrl && extensionSettings.ignore_youtube && isYouTubeURL(url)) {
     handleUrl = false;
@@ -367,14 +371,6 @@ function shouldContainInto (url, tab) {
 
   if (handleUrl && extensionSettings.ignore_flights && isFlightsURL(url)) {
     handleUrl = false;
-  }
-
-  if (handleUrl && extensionSettings.whitelist.length!=0 && isWhitelistedURL(url)) {
-    handleUrl = false;
-  }
-
-  if (!handleUrl && extensionSettings.allowlist.length!=0 && isAllowlistedURL(url)) {
-    handleUrl = true;
   }
 
   if (handleUrl) {
