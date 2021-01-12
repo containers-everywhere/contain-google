@@ -51,7 +51,7 @@ function onOptionsPageLoaded()
 		document.querySelector("#ignore_flights").checked = res.ignore_flights || false;
 		document.querySelector("#dont_override_containers").checked = res.dont_override_containers || false;
 	        fill_list_option(res.whitelist, "#whitelist");
-          fill_list_option(res.allowlist, "#allowlist");
+	        fill_list_option(res.allowlist, "#allowlist");
 	});
 }
 
