@@ -8,7 +8,7 @@ function validate_list(htmlId) {
 	if (list_domain == "") {continue;}
 	if (list_domain.match(domain_regex)) {validated_domains.push(list_domain); continue;}
 	alert("'" + list_domain + "' is not a valid domain.");
-	return [];
+	continue;
     }
     return validated_domains;
 }
