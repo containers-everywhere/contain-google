@@ -64,11 +64,21 @@
 
 		<p>
 			<label>
+				<textarea id="allowlist" value="" cols="80">
+				</textarea>
+				<br>
+				Include additional urls in Google Container<br>
+				<em>(Means use Google Container on these additional urls, e.g. for third party SSO or "Log in with Google". Use one url per line.)</em>
+			</label>
+		</p>
+
+		<p>
+			<label>
 				<textarea id="whitelist" value="" cols="80">
 				</textarea>
 				<br>
-				Whitelisted google urls<br>
-				<em>(Use one url per line.)</em>
+				Exclude Google urls in Google Container<br>
+				<em>(Means don't use Google Container on these Google urls. Use one url per line.)</em>
 			</label>
 		</p>
 
