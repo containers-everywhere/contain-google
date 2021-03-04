@@ -273,7 +273,7 @@ function reopenTab ({url, tab, cookieStoreId}) {
 function isGoogleURL (url) {
   const parsedUrl = new URL(url);
   for (let googleHostRE of googleHostREs) {
-    if (googleHostRE.test(parsedUrl.host)) {
+    if (googleHostRE.test(parsedUrl.hostname)) {
       return true;
     }
   }
@@ -283,7 +283,7 @@ function isGoogleURL (url) {
 function isYouTubeURL (url) {
   const parsedUrl = new URL(url);
   for (let youtubeHostRE of youtubeHostREs) {
-    if (youtubeHostRE.test(parsedUrl.host)) {
+    if (youtubeHostRE.test(parsedUrl.hostname)) {
       return true;
     }
   }
@@ -294,7 +294,7 @@ function isWhitelistedURL (url) {
   generateWhitelistedHostREs();
   const parsedUrl = new URL(url);
   for (let whitelistedHostRE of whitelistedHostREs) {
-    if (whitelistedHostRE.test(parsedUrl.host)) {
+    if (whitelistedHostRE.test(parsedUrl.hostname)) {
       return true;
     }
   }
@@ -305,7 +305,7 @@ function isAllowlistedURL (url) {
   generateAllowlistedHostREs();
   const parsedUrl = new URL(url);
   for (let allowlistedHostRE of allowlistedHostREs) {
-    if (allowlistedHostRE.test(parsedUrl.host)) {
+    if (allowlistedHostRE.test(parsedUrl.hostname)) {
       return true;
     }
   }
