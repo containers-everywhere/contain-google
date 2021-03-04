@@ -6,7 +6,7 @@ const GOOGLE_CONTAINER_ICON = "briefcase";
 let GOOGLE_DOMAINS = [
   "google.com", "google.org", "googleapis.com", "g.co", "ggpht.com", "gle",
   "blogger.com", "googleblog.com", "blog.google", "googleusercontent.com", "googlesource.com",
-  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", "about.google", "registry.google", "google", "gstatic.com", "goog"
+  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", "about.google", "registry.google", "google", "gstatic.com", "goog", "googleplex.com"
 ];
 
 const GOOGLE_INTL_DOMAINS = [
