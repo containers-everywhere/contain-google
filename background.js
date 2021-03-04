@@ -6,7 +6,7 @@ const GOOGLE_CONTAINER_ICON = "briefcase";
 let GOOGLE_DOMAINS = [
   "google.com", "google.org", "googleapis.com", "g.co", "ggpht.com", "gle",
   "blogger.com", "googleblog.com", "blog.google", "googleusercontent.com", "googlesource.com",
-  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", "about.google", "registry.google", "google", "gstatic.com", "goog"
+  "google.org", "google.net", "466453.com", "gooogle.com", "gogle.com", "ggoogle.com", "gogole.com", "goolge.com", "googel.com", "googlee.com", "googil.com", "googlr.com", "elgoog.im", "ai.google", "com.google", "about.google", "registry.google", "google", "gstatic.com", "goog", "googleplex.com"
 ];
 
 const GOOGLE_INTL_DOMAINS = [
@@ -273,7 +273,7 @@ function reopenTab ({url, tab, cookieStoreId}) {
 function isGoogleURL (url) {
   const parsedUrl = new URL(url);
   for (let googleHostRE of googleHostREs) {
-    if (googleHostRE.test(parsedUrl.host)) {
+    if (googleHostRE.test(parsedUrl.hostname)) {
       return true;
     }
   }
@@ -283,7 +283,7 @@ function isGoogleURL (url) {
 function isYouTubeURL (url) {
   const parsedUrl = new URL(url);
   for (let youtubeHostRE of youtubeHostREs) {
-    if (youtubeHostRE.test(parsedUrl.host)) {
+    if (youtubeHostRE.test(parsedUrl.hostname)) {
       return true;
     }
   }
@@ -294,7 +294,7 @@ function isWhitelistedURL (url) {
   generateWhitelistedHostREs();
   const parsedUrl = new URL(url);
   for (let whitelistedHostRE of whitelistedHostREs) {
-    if (whitelistedHostRE.test(parsedUrl.host)) {
+    if (whitelistedHostRE.test(parsedUrl.hostname)) {
       return true;
     }
   }
@@ -305,7 +305,7 @@ function isAllowlistedURL (url) {
   generateAllowlistedHostREs();
   const parsedUrl = new URL(url);
   for (let allowlistedHostRE of allowlistedHostREs) {
-    if (allowlistedHostRE.test(parsedUrl.host)) {
+    if (allowlistedHostRE.test(parsedUrl.hostname)) {
       return true;
     }
   }
