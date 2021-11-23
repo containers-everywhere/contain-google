@@ -36,7 +36,7 @@ const AD_DOMAINS = [
 ];
 
 const DEVELOPER_DOMAINS = [
-  "madewithcode.com", "design.google", "wellbeing.google", "gallery.io", "domains.google", "material.io", "getmdl.io", "android.com", "chromium.org", "cobrasearch.com", "chromecast.com", "chrome.com", "chromebook.com", "madewithcode.com", "whatbrowser.org", "withgoogle.com", "web.dev", "google.dev",
+  "madewithcode.com", "design.google", "wellbeing.google", "gallery.io", "domains.google", "material.io", "getmdl.io", "android.com", "chromium.org", "cobrasearch.com", "chromecast.com", "chrome.com", "chromebook.com", "madewithcode.com", "whatbrowser.org", "withgoogle.com", "web.dev", "google.dev", "pub.dev", "flutter.dev", "dart.dev", "grasshopper.app"
 ];
 
 GOOGLE_DOMAINS = GOOGLE_DOMAINS.concat(GOOGLE_INTL_DOMAINS)
