@@ -55,6 +55,7 @@ const googleHostREs = [];
 const youtubeHostREs = [];
 const whitelistedHostREs = [];
 const allowlistedHostREs = [];
+const softAllowlistedHostREs = [];
 
 async function isMACAddonEnabled () {
   try {
@@ -181,13 +182,25 @@ function generateAllowlistedHostREs () {
   }
 }
 
+function generateSoftAllowlistedHostREs () {
+ if (softAllowlistedHostREs.length != 0) {return;}
+  const matchOperatorsRegex = /[|\\{}()[\]^$+*?.-]/g;
+  for (let allowlistedDomain of extensionSettings.soft_allowlist) {
+    allowlistedDomain = allowlistedDomain.replace(matchOperatorsRegex, '\\$&');
+    softAllowlistedHostREs.push(new RegExp(`(^|\\.)${allowlistedDomain}$`));
+  }
+}
+
 async function loadExtensionSettings () {
   extensionSettings = await browser.storage.sync.get();
   if (extensionSettings.whitelist === undefined){
- 	extensionSettings.whitelist = "";
+    extensionSettings.whitelist = "";
   }
   if (extensionSettings.allowlist === undefined){
- 	extensionSettings.allowlist = "";
+    extensionSettings.allowlist = "";
+  }
+  if (extensionSettings.soft_allowlist === undefined){
+    extensionSettings.soft_allowlist = "";
   }
 }
 
@@ -312,6 +325,18 @@ function isAllowlistedURL (url) {
   return false;
 }
 
+function isSoftAllowlistedURL (url) {
+  generateSoftAllowlistedHostREs();
+  const parsedUrl = new URL(url);
+  for (let allowlistedHostRE of softAllowlistedHostREs) {
+    if (allowlistedHostRE.test(parsedUrl.hostname)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
 function isSearchPageURL (url) {
   const parsedUrl = new URL(url);
   return parsedUrl.pathname.startsWith('/search');
@@ -344,7 +369,8 @@ function shouldContainInto (url, tab) {
   }
 
   let allowlistUrl = (extensionSettings.allowlist.length!=0 && isAllowlistedURL(url));
-  let handleUrl = isGoogleURL(url) || allowlistUrl;
+  let softAllowlistUrl = (extensionSettings.soft_allowlist.length!=0 && isSoftAllowlistedURL(url));
+  let handleUrl = isGoogleURL(url) || allowlistUrl || softAllowlistUrl;
 
   if (handleUrl && extensionSettings.whitelist.length!=0 && isWhitelistedURL(url)) {
     handleUrl = false;
@@ -381,8 +407,8 @@ function shouldContainInto (url, tab) {
         return false;
       }
 
-      if (allowlistUrl) {
-        // Don't force an allowlisted URL to be in the Google Container
+      if (softAllowlistUrl) {
+        // Don't force an soft-allowlisted URL to be in the Google Container
         return false;
       }
 
