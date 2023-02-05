@@ -18,7 +18,7 @@ const GOOGLE_SERVICES = [
 ];
 
 const YOUTUBE_DOMAINS = [
-  "youtube.com", "youtu.be", "yt.be", "ytimg.com", "youtube-nocookie.com", "youtubegaming.com", "youtubeeducation.com",
+  "youtube.com", "youtu.be", "yt.be", "ytimg.com", "youtube-nocookie.com", "youtubegaming.com", "youtubeeducation.com", "youtube",
 ];
 
 const BLOGSPOT_DOMAINS = [
