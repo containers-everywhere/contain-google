@@ -261,7 +261,8 @@ function reopenTab ({url, tab, cookieStoreId}) {
     cookieStoreId,
     active: tab.active,
     index: tab.index + 1,
-    windowId: tab.windowId
+    windowId: tab.windowId,
+    openerTabId: tab.openerTabId
   });
   // We do not want to erase google container if going from
   // google container back to default.
