@@ -32,6 +32,7 @@ function onOptionsPageSave(e)
 		"ignore_flights": document.querySelector("#ignore_flights").checked,
 		"dont_override_containers": document.querySelector("#dont_override_containers").checked,
 		"whitelist": validate_list("#whitelist"),
+		"soft_allowlist": validate_list("#soft_allowlist"),
 		"allowlist": validate_list("#allowlist")
 	});
 
@@ -51,6 +52,7 @@ function onOptionsPageLoaded()
 		document.querySelector("#ignore_flights").checked = res.ignore_flights || false;
 		document.querySelector("#dont_override_containers").checked = res.dont_override_containers || false;
 	        fill_list_option(res.whitelist, "#whitelist");
+	        fill_list_option(res.soft_allowlist, "#soft_allowlist");
 	        fill_list_option(res.allowlist, "#allowlist");
 	});
 }
