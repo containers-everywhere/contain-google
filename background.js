@@ -14,7 +14,7 @@ const GOOGLE_INTL_DOMAINS = [
 ];
 
 const GOOGLE_SERVICES = [
-"like.com", "keyhole.com", "panoramio.com", "picasa.com", "urchin.com", "igoogle.com", "foofle.com", "froogle.com", "localguidesconnect.com", "googlemail.com", "googleanalytics.com", "google-analytics.com", "googletagmanager.com", "googlecode.com", "googlesource.com", "googledrive.com", "googlearth.com", "googleearth.com", "googlemaps.com", "googlepagecreator.com", "googlescholar.com", "advertisercommunity.com", "thinkwithgoogle.com", "googlegroups.com",
+"like.com", "keyhole.com", "panoramio.com", "picasa.com", "urchin.com", "igoogle.com", "foofle.com", "froogle.com", "localguidesconnect.com", "googlemail.com", "googleanalytics.com", "google-analytics.com", "googletagmanager.com", "googlecode.com", "googlesource.com", "googledrive.com", "googlearth.com", "googleearth.com", "googlemaps.com", "googlepagecreator.com", "googlescholar.com", "advertisercommunity.com", "thinkwithgoogle.com", "googlegroups.com", "search.google.com/search-console",
 ];
 
 const YOUTUBE_DOMAINS = [
@@ -315,7 +315,7 @@ function isAllowlistedURL (url) {
 
 function isSearchPageURL (url) {
   const parsedUrl = new URL(url);
-  return parsedUrl.pathname.startsWith('/search');
+  return !!parsedUrl.pathname.match(/^\/search$/) && !!parsedUrl.search;
 }
 
 function isPrefPageURL (url) {
