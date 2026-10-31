@@ -32,7 +32,16 @@ Because you are logged into Google only in the Container, “Like” buttons and
 
 ### Logging in or creating accounts on other websites using Google
 
-Websites that allow you to create an account or log in using Google will generally not work properly.
+Websites that allow you to create an account or log in using Google will generally not work properly. There are two ways to make it work:
+
+- Turn on **Allow "Sign in with Google" on other sites** in the add-on preferences. The Google sign-in page then stays in the same tab (or popup) and container as the website that opened it, so the website receives the login. You sign in to Google there separately, and those Google cookies are cleared on the next browser start.
+- Add the website to **Include additional urls in Google Container**, so the website itself opens in the Google Container.
+
+Sign-in results that are sent back to the website with a form POST are never reopened in another container, since that would drop the login.
+
+### Troubleshooting
+
+Open `about:debugging#/runtime/this-firefox`, click **Inspect** next to Google Container and go to **Console**. With the **Debug** filter on, every time the add-on reopens a page in another container, or decides not to, it logs the page (without its query string) and the reason.
 
 ## Will this protect me from Google completely?
 

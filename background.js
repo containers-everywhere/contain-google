@@ -14,11 +14,11 @@ const GOOGLE_INTL_DOMAINS = [
 ];
 
 const GOOGLE_SERVICES = [
-"like.com", "keyhole.com", "panoramio.com", "picasa.com", "urchin.com", "igoogle.com", "foofle.com", "froogle.com", "localguidesconnect.com", "googlemail.com", "googleanalytics.com", "google-analytics.com", "googletagmanager.com", "googlecode.com", "googlesource.com", "googledrive.com", "googlearth.com", "googleearth.com", "googlemaps.com", "googlepagecreator.com", "googlescholar.com", "advertisercommunity.com", "thinkwithgoogle.com", "googlegroups.com",
+"like.com", "keyhole.com", "panoramio.com", "picasa.com", "urchin.com", "igoogle.com", "foofle.com", "froogle.com", "localguidesconnect.com", "googlemail.com", "googleanalytics.com", "google-analytics.com", "googletagmanager.com", "goo.gl", "googlevideo.com", "gvt1.com", "gvt2.com", "googlecode.com", "googlesource.com", "googledrive.com", "googlearth.com", "googleearth.com", "googlemaps.com", "googlepagecreator.com", "googlescholar.com", "advertisercommunity.com", "thinkwithgoogle.com", "googlegroups.com",
 ];
 
 const YOUTUBE_DOMAINS = [
-  "youtube.com", "youtu.be", "yt.be", "ytimg.com", "youtube-nocookie.com", "youtubegaming.com", "youtubeeducation.com", "youtube",
+  "youtube.com", "youtu.be", "yt.be", "ytimg.com", "youtube-nocookie.com", "youtubegaming.com", "youtubeeducation.com", "withyoutube.com", "youtube",
 ];
 
 const BLOGSPOT_DOMAINS = [
@@ -50,6 +50,7 @@ let googleCookieStoreId = null;
 let extensionSettings = {};
 
 const canceledRequests = {};
+const signInTabs = {};
 const tabsWaitingToLoad = {};
 const googleHostREs = [];
 const youtubeHostREs = [];
@@ -338,6 +339,18 @@ function isFlightsURL (url) {
   return parsedUrl.pathname.startsWith('/flights');
 }
 
+// Entry points of "Sign in with Google" flows started by third party sites
+// (OAuth 2.0 / OpenID Connect and Google Identity Services)
+function isGoogleSignInURL (url) {
+  const parsedUrl = new URL(url);
+  if (parsedUrl.hostname !== "accounts.google.com") {
+    return false;
+  }
+  return parsedUrl.pathname.startsWith('/o/oauth2/') ||
+    parsedUrl.pathname.startsWith('/signin/oauth') ||
+    parsedUrl.pathname.startsWith('/gsi/');
+}
+
 function shouldContainInto (url, tab) {
   if (!url.startsWith("http")) {
     // we only handle URLs starting with http(s)
@@ -456,6 +469,14 @@ async function maybeReopenAlreadyOpenTabs () {
   });
 }
 
+function logDecision (decision, options, tab) {
+  // Shown under "Debug" in the add-on console (about:debugging > Inspect).
+  // Query strings are left out since sign-in URLs carry tokens.
+  const parsedUrl = new URL(options.url);
+  // eslint-disable-next-line no-console
+  console.debug(`[Google Container] ${parsedUrl.origin}${parsedUrl.pathname}: ${decision} (tab ${tab.id}, ${tab.cookieStoreId})`);
+}
+
 async function containGoogle (options) {
   // Listen to requests and open Google into its Container,
   // open other sites into the default tab context
@@ -482,10 +503,32 @@ async function containGoogle (options) {
     return;
   }
 
+  if (extensionSettings.allow_signin_on_other_sites && tab.cookieStoreId !== googleCookieStoreId) {
+    if (isGoogleSignInURL(options.url)) {
+      // A third party site started "Sign in with Google", let the whole flow
+      // happen in the tab's current container so the site gets the result
+      signInTabs[tab.id] = true;
+    }
+    if (signInTabs[tab.id]) {
+      if (!isGoogleURL(options.url)) {
+        // Sign-in flow redirected back to the third party site
+        delete signInTabs[tab.id];
+      }
+      logDecision("sign-in flow, keep in current container", options, tab);
+      return;
+    }
+  }
+
   // Check whether we should contain this request into another container
   const cookieStoreId = shouldContainInto(options.url, tab);
   if (!cookieStoreId) {
     // Request doesn't need to be contained
+    return;
+  }
+  if (options.method !== "GET") {
+    // Reopening would turn this into a GET and drop the request body, e.g.
+    // the credential a sign-in flow POSTs back to the site (response_mode=form_post)
+    logDecision(`${options.method} request, not reopening`, options, tab);
     return;
   }
   if (shouldCancelEarly(tab, options)) {
@@ -493,6 +536,7 @@ async function containGoogle (options) {
     return {cancel: true};
   }
   // Decided to contain
+  logDecision(`reopen in ${cookieStoreId}`, options, tab);
   reopenTab({
     url: options.url,
     tab,
@@ -533,6 +577,10 @@ async function containGoogle (options) {
 
   // Add the request listener
   browser.webRequest.onBeforeRequest.addListener(containGoogle, {urls: ["<all_urls>"], types: ["main_frame"]}, ["blocking"]);
+
+  browser.tabs.onRemoved.addListener(tabId => {
+    delete signInTabs[tabId];
+  });
 
   maybeReopenAlreadyOpenTabs();
 })();

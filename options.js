@@ -31,6 +31,7 @@ function onOptionsPageSave(e)
 		"ignore_maps": document.querySelector("#ignore_maps").checked,
 		"ignore_flights": document.querySelector("#ignore_flights").checked,
 		"dont_override_containers": document.querySelector("#dont_override_containers").checked,
+		"allow_signin_on_other_sites": document.querySelector("#allow_signin_on_other_sites").checked,
 		"whitelist": validate_list("#whitelist"),
 		"allowlist": validate_list("#allowlist")
 	});
@@ -50,6 +51,7 @@ function onOptionsPageLoaded()
 		document.querySelector("#ignore_maps").checked = res.ignore_maps || false;
 		document.querySelector("#ignore_flights").checked = res.ignore_flights || false;
 		document.querySelector("#dont_override_containers").checked = res.dont_override_containers || false;
+		document.querySelector("#allow_signin_on_other_sites").checked = res.allow_signin_on_other_sites || false;
 	        fill_list_option(res.whitelist, "#whitelist");
 	        fill_list_option(res.allowlist, "#allowlist");
 	});
